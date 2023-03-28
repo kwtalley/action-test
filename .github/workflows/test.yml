@@ -1,0 +1,41 @@
+name: Tests
+#  Tests workflow builds all of the example smart contracts and then runs tests with them on Provenance
+#  This workflow is run on pushes to master & every Pull Request,
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  #  This action cleans up previously running instances of a workflow on the same branch. This accomplishes
+  #  the task of automatically cancelling CI runs on pushes to the same branch, which is a common feature in
+  #  most CI systems but currently not possible with GitHub actions.
+  cleanup-runs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rokroskar/workflow-run-cleanup-action@v0.3.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    if: "!startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/main'"
+
+  test_msgfees_smart_contract:
+    runs-on: ubuntu-latest
+    name: Test MsgFees Smart Contract
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Add wasm32 target
+        run: |
+          rustup target add wasm32-unknown-unknown
+      - name: Build wasm binary
+        run: |
+          cd ./contracts/msgfees
+          make all
+      - name: Provenance Test
+        uses: provenance-io/provenance-testing-action@v1.1.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          provenance_version: "v1.14.1"
+          test_script: "./scripts/msgfees_test.sh"
+          generate_proposals: true
+          wasm_path: "./artifacts/msgfees.wasm"
