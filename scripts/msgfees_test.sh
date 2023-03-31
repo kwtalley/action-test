@@ -10,6 +10,7 @@ if [ -z "${CI}" ]; then
   WASM=$1
 fi
 
+echo "provenance cmd = $PROV_CMD"
 pwd
 ls -la
 
