@@ -10,6 +10,9 @@ if [ -z "${CI}" ]; then
   WASM=$1
 fi
 
+pwd
+ls -la
+
 # setup all of the necessary keys
 "$PROV_CMD" keys add sender --keyring-backend test --testnet --hd-path "44'/1'/0'/0/0" $LOCAL_ARGS
 "$PROV_CMD" keys add feebucket --keyring-backend test --testnet --hd-path "44'/1'/0'/0/0" $LOCAL_ARGS
