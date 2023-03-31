@@ -31,10 +31,11 @@ jobs:
         run: |
           make all
       - name: Provenance Test
-        uses: provenance-io/provenance-testing-action@v1.1.1
+        uses: provenance-io/provenance-testing-action@d588044f78db3fa7c9ddb42b5e56776f2f512e6f
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           provenance_version: "v1.14.1"
+          smart_contract_action_version: "d588044f78db3fa7c9ddb42b5e56776f2f512e6f"
           test_script: "./scripts/msgfees_test.sh"
           generate_proposals: true
           wasm_path: "./artifacts/msgfees.wasm"
