@@ -1,18 +1,9 @@
 #!/bin/bash -e
 
 # This script stores, instantiates and executes the msgfees smart contract
-PROV_CMD="./bin/provenanced"
+PROV_CMD="provenanced"
 WASM="./contracts/msgfees/artifacts/msgfees.wasm"
 declare LOCAL_ARGS
-if [ -z "${CI}" ]; then
-  PROV_CMD=provenanced
-  LOCAL_ARGS="--home ../provenance/build/run/provenanced"
-  WASM=$1
-fi
-
-echo "provenance cmd = $PROV_CMD"
-pwd
-ls -la
 
 # setup all of the necessary keys
 "$PROV_CMD" keys add sender --keyring-backend test --testnet --hd-path "44'/1'/0'/0/0" $LOCAL_ARGS
